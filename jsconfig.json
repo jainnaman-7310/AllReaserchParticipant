@@ -1,0 +1,19 @@
+{
+    "compilerOptions": {
+      "target": "es6",
+      "jsx": "preserve",
+      "baseUrl": "src",
+      "allowSyntheticDefaultImports": true,
+      "paths": {
+        "components/*": ["src/components"],
+        "pages/*": ["src/pages"],
+        "assets/*": ["src/assets"],
+        "config/*": ["src/config"],
+        "slices/*": ["src/slices"],
+        "services/*": ["src/services"],
+        "utils/*": ["src/utils"]
+      }
+    },
+    "exclude": ["node_modules"]
+  }
+  

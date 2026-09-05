@@ -1,0 +1,65 @@
+{
+  "env": {
+    "browser": true,
+    "es2021": true
+  },
+  "extends": ["plugin:react/recommended", "airbnb"],
+  "overrides": [
+    {
+      "files": [
+        "**/*.test.js"
+      ],
+      "env": {
+        "jest": true
+      }
+    }
+  ],
+  "parserOptions": {
+    "ecmaVersion": "latest",
+    "sourceType": "module",
+    "allowImportExportEverywhere": true
+  },
+  "plugins": ["react", "prettier"],
+  
+  "rules": {
+    "max-len": [
+      "error",
+      {
+        "code": 200
+      }
+    ],
+    "semi": ["error", "always"],
+    "quotes": ["error", "single"],
+    "no-console": "warn",
+    "no-empty": 0,
+    "no-irregular-whitespace": 0,
+    "react/react-in-jsx-scope": "off",
+    "react/jsx-filename-extension": [1, { "extensions": [".js", ".jsx"] }],
+    "no-unused-vars": ["warn", { "vars": "all", "args": "after-used" }],
+    "import/no-unresolved": [2, { "caseSensitive": false }],
+    "jsx-quotes": ["error", "prefer-single"],
+    "no-underscore-dangle": 0,
+    "linebreak-style": 0,
+    "react/prop-types": "off",
+    "react/jsx-curly-spacing": ["error", "never"],
+    "react/prefer-stateless-function": "off",
+    "react/jsx-props-no-spreading": "off",
+    "import/prefer-default-export": "off",
+    "class-methods-use-this": ["off", { "exceptMethods": ["create"] }],
+    "global-require": 0,
+    "default-param-last": 0,
+    "react/no-array-index-key": "off",
+    "jsx-a11y/label-has-associated-control": 0,
+    "import/no-extraneous-dependencies": "off",
+    "no-plusplus": [2, { "allowForLoopAfterthoughts": true }],
+    "no-param-reassign": [2, { "props": false }]
+  },
+  "settings": {
+    "import/resolver": {
+      "node": {
+        "extensions": [".js", ".jsx"],
+        "moduleDirectory": ["node_modules", "src"]
+      }
+    }
+  }
+}

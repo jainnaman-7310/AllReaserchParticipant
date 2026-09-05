@@ -1,0 +1,33 @@
+#loadingDiv .loader {
+    display:flex;
+    justify-content: center;
+    align-items: center;
+    height: 100%;
+    /* animation: sk-chase 2.5s infinite linear both; */
+}
+
+#loadingDiv svg path,
+#loadingDiv svg rect {
+    fill: #ffffff;
+}
+
+#loadingDiv {
+    display: none;
+    position: fixed;
+    z-index: 999999;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(44, 62, 80, 0.8);
+}
+
+/* Turn off scrollbar when body element has the loading class */
+body.loading {
+    overflow: hidden;
+}
+
+/* Make spinner image visible when body element has the loading class */
+body.loading #loadingDiv {
+    display: block;
+}

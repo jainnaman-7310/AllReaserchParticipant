@@ -1,0 +1,16 @@
+export const PASS = '1690';
+export const SPLENDED = '1803';
+export const UNIMARKETV2 = '1951';
+export const MARKETMIRROR = '1874';
+export const MARKETXCEL = '1949';
+export const HALLAT = '1855';
+export const FUN = '1822';
+export const SUNSHINE = '1857';
+export const PANGEAFORUM = '1761';
+export const KYA = '1914';
+export const DIVERGENT = '1894';
+export const GNL = '1936';
+export const BIG_WAVE = '1946';
+export const ADVUEMEDIA = '1804';
+export const RASIK = '1832';
+export const TOLUNA = '2122';

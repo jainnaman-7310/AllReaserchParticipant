@@ -1,0 +1,653 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html,
+body {
+  height: 100%;
+  width: 100%;
+  font-family: "Poppins", sans-serif;
+}
+
+/* .header {
+  background-color: #1173A0;
+  width: 100%;
+  height: 150px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.header .logo img {
+  width: 200px;
+} */
+
+header {
+  height: 100%;
+}
+.right-half {
+  position: fixed; /* or 'fixed', depending on your layout */
+  right: 0;          /* Align to the right */
+  top: 10px;            /* Align to the top */
+  width: 50%;       /* Occupy 50% of the width */
+  height: 100%;     /* Optional: full height */
+}
+
+
+#rightcontainer {
+  width: 50%;
+  background-color: white;
+}
+
+.subcontainers {
+  min-height: 100%;
+  background: yellow;
+}
+
+.utilimage {
+  width: 20px;
+  height: 20px;
+}
+
+.bulbimage {
+  width: 30px;
+  height: 30px;
+}
+
+.lockimage {
+  width: 27px;
+  height: 27px;
+}
+
+.starimage {
+  width: 25px;
+  height: 25px;
+}
+
+.utilimage-box {
+  position: absolute;
+  top: 10px;
+  left: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid #d3e0e9;
+  border-radius: 9px;
+  width: 50px;
+  height: 50px;
+  background-color: #056e9c0d;
+}
+
+
+.utilsubcontainers {
+  min-height: 100%;
+  background: yellow;
+}
+
+.utilheading {
+  color: #056e9c;
+  font-size: 2rem;
+  text-align: center;
+  margin-bottom: 20px;
+  max-width: 80%; /* Adjust this value as needed */
+  margin-left: auto; /* Center the heading */
+  margin-right: auto;
+  line-height: 1.5;
+  margin-top: 0;
+  padding-top: 0;
+  font-weight: 600;
+}
+
+.intro-text {
+  text-align: center;
+  font-size: 1.1rem;
+  line-height: 1.6;
+  color: #333;
+  margin-bottom: 30px;
+}
+
+.tips-container {
+  display: flex;
+  justify-content: space-around;
+  flex-wrap: wrap;
+}
+
+.tip-box {
+   position: relative;
+  width: 23%;
+  background-color: #eaf2fc;
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+
+
+}
+
+#mobileMainContainer {
+  display: none;
+}
+
+.tip-box h3 {
+  margin-top: 10px;
+}
+
+
+
+.tip-text h3 {
+  margin: 0;
+  font-size: 1.2rem;
+  font-weight: 575;
+  color: #056e9c
+}
+
+.tip-text p {
+  margin: 5px 0 0 0;
+  font-size: 1rem;
+  line-height: 1.4;
+  color: #333;
+}
+
+.tip-text {
+  margin-left: 50px;
+  text-align: left; /* Align text to the left */
+  flex-grow: 1;
+}
+
+.warningimg {
+  width: 26px;
+  height: 26px;
+}
+
+.footer-message {
+  margin-top: 30px;
+  text-align: center;
+  display: flex;
+  align-items: center;
+  background-color: rgba(240, 150, 24, 0.04);
+  border-radius: 10px;
+  width: 100%;
+  height: 53px;
+  padding: 22px;
+}
+
+.footer-message p {
+  margin: 0;
+  margin-top: -2px; /* Remove default margin */
+  font-size: 1rem; /* Ensure font size matches other boxes */
+  color: #f09618 ;
+  font-weight: 600;
+}
+
+.footerimage-box {
+  position: relative;
+  display: flex;
+  border: 1px solid #d3e0e9;
+  border-radius: 8px;
+  width: 41px;
+  height: 42px;
+  background-color: rgba(240, 150, 24, 0.11) ;
+  margin-right: 7px;/* Center and add margin */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Styles for desktop view */
+.desktopView {
+  display: block;
+}
+.mobileView {
+  display: none;
+}
+#desktopMainContainer {
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+.top-half {
+  height: 50%;
+  background-color: #f0f8ff;
+  padding: 40px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.bottom-half {
+  margin-top: 5rem;
+  height: 50%;
+  background-color: #fff;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+
+/* Media query for mobile view */
+@media (min-width: 767px) and (max-width: 992px) {
+  .desktopView {
+    display: none;
+  }
+  .mobileView {
+    display: block;
+  }
+
+  .question-wrap {
+    margin-top: 28px;
+  }
+
+  
+.bottom-half {
+  margin-top: 5px;
+  height: 50%;
+  background-color: #fff;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-right: 95px;
+  
+}
+
+  #mobileMainContainer{ 
+      min-height: 45vh;  
+      /* background: linear-gradient(130deg, #141414, 76%, #14ABCF 76%); */ 
+      min-width: 100%;
+      display: flex;   
+      padding: 70px;
+      
+  }
+
+  .mobileContainer {
+    padding: 20px;
+    font-size: 10px; 
+    text-align: center;
+    font-family: "Poppins", sans-serif;
+    
+  }
+
+  .mobileHeading {
+    font-size: 22px;
+    color: #056e9c; /* Matching the blue color from the image */
+    line-height: 1.5;
+    margin-bottom: 13px;
+    font-weight: 500;
+    
+  }
+
+  .mobileIntroText {
+    font-size: 16px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-bottom: 20px;
+    line-height: 1.5;
+    
+  }
+
+  .mobileTipsContainer {
+    display: grid;
+    grid-template-columns: 1fr 1fr; /* Two equal-width columns */
+    gap: 15px; 
+    margin-top: 20px;
+    
+  }
+
+  .mobileTipBox {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: #0A9ADA14; /* Light blue background for the tip boxes */
+    border-radius: 10px;
+    padding: -5px 8px;
+    padding-bottom: 0px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    text-align: center;
+    height: 40px; 
+  }
+
+  .mobileTipBox h3{
+    font-size: 12px; /* Reduced text size */
+    margin: 0;
+    /* line-height: 1.2; */
+    display: flex;
+  justify-content: flex-start;
+  font-weight: 600;
+  color:#0A9ADA;
+  }
+
+  .mobileFooterMessage {
+    margin-top: 20px;
+    color:#0A9ADA;
+    background-color: rgba(10, 154, 218, 0.14);
+    font-weight: 500;
+    font-size: 14px;
+    text-align: center;
+    display:flex;
+  /* Same background as tip boxes */
+  padding: 10px;
+  border-radius: 10px;
+  flex: 1;
+  }
+
+  .mobileFooterMessage p{
+    margin-top: 3px;
+    font-weight: 500;
+  }
+
+  .mobileFooterimage-box {
+    position: relative;
+    display: flex;
+    border: 1px solid #d3e0e9;
+    border-radius: 50%;
+    width: 30px;
+    height: 30px;
+    background-color: rgba(10, 154, 218, 0.19);
+    margin-right: 7px;/* Center and add margin */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .mobBulb{
+    width: 23px;
+    height: 23px;
+    margin-right: 10px;
+  }
+
+  .mobClock{
+    width: 20px;
+    height: 20px;
+    margin-right: 10px;
+
+  }
+
+  .mobLock{
+    width: 21px;
+    height: 21px;
+    margin-right: 10px;
+
+  }
+
+  .mobStar{
+    width: 21px;
+    height: 21px;
+    margin-right: 10px;
+
+  }
+
+  .alertt{
+    width: 17px;
+    height: 17px;
+    margin-bottom: 2px;
+    margin-right: 2px;
+  }
+}
+
+
+
+@media (max-width: 767px) {
+  .desktopView {
+    display: none;
+  }
+  .mobileView {
+    display: block;
+  }
+
+  
+.bottom-half {
+  margin-top: 1rem;
+  height: 50%;
+  background-color: #fff;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+  #mobileMainContainer{ 
+      min-height: 70vh;  
+      /* background: linear-gradient(130deg, #141414, 76%, #14ABCF 76%); */ 
+      min-width: 100%;
+      display: flex;   
+      
+  }
+
+  .mobileContainer {
+    padding: 20px;
+    font-size: 10px; 
+    text-align: center;
+    font-family: "Poppins", sans-serif;
+    
+  }
+
+  .mobileHeading {
+    font-size: 22px;
+    color: #056e9c; /* Matching the blue color from the image */
+    line-height: 1.5;
+    margin-bottom: 13px;
+    font-weight: 500;
+    
+  }
+
+  .mobileIntroText {
+    font-size: 16px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-bottom: 20px;
+    line-height: 1.5;
+    
+  }
+
+  .mobileTipsContainer {
+    display: grid;
+    grid-template-columns: 1fr 1fr; /* Two equal-width columns */
+    gap: 15px; 
+    margin-top: 20px;
+    
+  }
+
+  .mobileTipBox {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: #0A9ADA14; /* Light blue background for the tip boxes */
+    border-radius: 10px;
+    padding: -5px 8px;
+    padding-bottom: 0px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    text-align: center;
+    height: 40px; 
+  }
+
+  .mobileTipBox h3{
+    font-size: 12px; /* Reduced text size */
+    margin: 0;
+    /* line-height: 1.2; */
+    display: flex;
+  justify-content: flex-start;
+  font-weight: 600;
+  color:#0A9ADA;
+  }
+
+  .mobileFooterMessage {
+    margin-top: 20px;
+    color:#0A9ADA;
+    background-color: rgba(10, 154, 218, 0.14);
+    font-weight: 500;
+    font-size: 14px;
+    text-align: center;
+    display:flex;
+  /* Same background as tip boxes */
+  padding: 10px;
+  border-radius: 10px;
+  flex: 1;
+  }
+
+  .mobileFooterMessage p{
+    margin-top: 3px;
+    font-weight: 500;
+  }
+
+  .mobileFooterimage-box {
+    position: relative;
+    display: flex;
+    border: 1px solid #d3e0e9;
+    border-radius: 50%;
+    width: 30px;
+    height: 30px;
+    background-color: rgba(10, 154, 218, 0.19);
+    
+ margin-right: 7px;/* Center and add margin */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+
+  }
+
+  .mobBulb{
+    width: 23px;
+    height: 23px;
+    margin-right: 10px;
+  }
+
+  .mobClock{
+    width: 20px;
+    height: 20px;
+    margin-right: 10px;
+
+  }
+
+  .mobLock{
+    width: 21px;
+    height: 21px;
+    margin-right: 10px;
+
+  }
+
+  .mobStar{
+    width: 21px;
+    height: 21px;
+    margin-right: 10px;
+
+  }
+
+  .alertt{
+    width: 17px;
+    height: 17px;
+    margin-bottom: 2px;
+    margin-right: 2px;
+  }
+}
+
+.question-wrap {
+  box-shadow: 0px 2px 12px rgba(0, 0, 0, 0.08);
+  border-radius: 10px;
+  min-height: 300px;
+  margin-top: 100px;
+}
+
+.question-wrap .question-box {
+  padding: 30px 70px;
+}
+
+.question-index {
+  padding: 30px;
+}
+
+.btn-primary {
+  --bs-btn-color: #fff;
+  --bs-btn-bg: #1173A0;
+  --bs-btn-border-color: #1173A0;
+  --bs-btn-hover-color: #fff;
+  --bs-btn-hover-bg: #1173A0;
+  --bs-btn-hover-border-color: #1173A0;
+  --bs-btn-focus-shadow-rgb: 49, 132, 253;
+  --bs-btn-active-color: #fff;
+  --bs-btn-active-bg: #1173A0;
+  --bs-btn-active-border-color: #1173A0;
+  --bs-btn-active-shadow: inset 0 3px 5px rgba(0, 0, 0, 0.125);
+  --bs-btn-disabled-color: #fff;
+  --bs-btn-disabled-bg: #1173A0;
+  --bs-btn-disabled-border-color: #1173A0;
+}
+
+.question-footer button {
+  width: 180px;
+  font-size: 18px;
+}
+
+@media(min-width:768px) {
+  .question-content input[type="text"] {
+    width: 80%;
+  }
+
+  .question-content select {
+    width: 80%;
+  }
+}
+
+@media(max-width: 820px) {
+  .question-wrap .question-box {
+    padding: 20px 30px;
+  }
+
+  .question-index {
+    padding: 20px 0px;
+  }
+}
+
+@media (min-width: 576px) and (max-width: 767px) {
+  .question-index {
+    float: right;
+    margin-right: 30px;
+  }
+}
+
+@media (max-width: 540px) {
+  .question-index {
+    float: right;
+    margin-right: 30px;
+  }
+}
+
+.question-content {
+  max-height: 500px;
+  overflow: auto;
+}
+
+.question-content::-webkit-scrollbar {
+  width: 10px;
+  background-color: #F5F5F5;
+}
+
+.question-content::-webkit-scrollbar-thumb {
+  background-color: #1173A0;
+
+  background-image: -webkit-gradient(linear, 0 0, 0 100%,
+      color-stop(.5, rgba(255, 255, 255, .2)),
+      color-stop(.5, transparent), to(transparent));
+}
+
+.custom-rotate {
+  transform: rotate(6deg);
+}
+
+.rotate-minus-6 {
+  transform: rotate(-6deg);
+}
+
+@media (min-width: 767px) and (max-width: 992px) {
+
+  .question-wrap {
+    margin-top: 28px;
+  }
+}

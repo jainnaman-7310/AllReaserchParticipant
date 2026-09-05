@@ -1,0 +1,75 @@
+{
+  "name": "zampparticipantexpose",
+  "version": "0.1.0",
+  "private": true,
+  "dependencies": {
+    "@reduxjs/toolkit": "^1.9.5",
+    "@testing-library/jest-dom": "^5.16.5",
+    "@testing-library/react": "^13.4.0",
+    "@testing-library/user-event": "^13.5.0",
+    "antd": "^5.24.3",
+    "axios": "^1.4.0",
+    "crypto-js": "^4.2.0",
+    "detect-browser-language": "^0.0.2",
+    "env-cmd": "^10.1.0",
+    "i18next": "^23.2.6",
+    "i18next-browser-languagedetector": "^7.1.0",
+    "i18next-http-backend": "^2.2.1",
+    "nprogress": "^0.2.0",
+    "react": "^18.2.0",
+    "react-confirm-alert": "^3.0.6",
+    "react-device-detect": "^2.2.3",
+    "react-dom": "^18.2.0",
+    "react-i18next": "^13.0.1",
+    "react-redux": "^8.1.0",
+    "react-router-dom": "^6.12.1",
+    "react-scripts": "5.0.1",
+    "redux-devtools-extension": "^2.13.9",
+    "sentinel-guard.js": "^1.0.1",
+    "simple-crypto-js": "^2.0.2",
+    "universal-cookie": "^4.0.4",
+    "web-vitals": "^2.1.4"
+  },
+  "scripts": {
+    "start": "react-scripts start",
+    "build": "react-scripts build",
+    "build:staging": "env-cmd -f .env.staging react-scripts build",
+    "build:production": "env-cmd -f .env.production react-scripts build",
+    "build:hotfix": "env-cmd -f .env.hotfix react-scripts build",
+    "test": "react-scripts test",
+    "eject": "react-scripts eject",
+    "lint": "eslint src/**/*.{js,jsx}",
+    "lint:fix": "eslint --fix src/**/*.{js,jsx}",
+    "format": "prettier --write src/**/*.{js,jsx,css,md,json,scss} --config ./.prettierrc"
+  },
+  "eslintConfig": {
+    "extends": [
+      "react-app",
+      "react-app/jest"
+    ]
+  },
+  "browserslist": {
+    "production": [
+      ">0.2%",
+      "not dead",
+      "not op_mini all"
+    ],
+    "development": [
+      "last 1 chrome version",
+      "last 1 firefox version",
+      "last 1 safari version"
+    ]
+  },
+  "devDependencies": {
+    "eslint": "^8.42.0",
+    "eslint-config-airbnb": "^19.0.4",
+    "eslint-config-prettier": "^8.8.0",
+    "eslint-plugin-import": "^2.27.5",
+    "eslint-plugin-jsx-a11y": "^6.7.1",
+    "eslint-plugin-prettier": "^4.2.1",
+    "eslint-plugin-react": "^7.32.2",
+    "eslint-plugin-react-hooks": "^4.6.0",
+    "prettier": "^2.8.8",
+    "tailwindcss": "^3.4.4"
+  }
+}
