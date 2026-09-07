@@ -5,9 +5,6 @@
 import React, { useEffect, useState } from 'react';
 import { Modal } from 'antd';
 import { setBrowserData, redirectToUrl } from 'utils/utils';
-import PrivacyPolicy from 'pages/policyPages/PrivacyPolicy';
-import TermsConditions from 'pages/policyPages/TermsConditions';
-import CookiesPolicy from 'pages/policyPages/CookiesPolicy';
 import { requestData } from 'utils/helpers';
 import * as rdd from 'react-device-detect';
 import { useSelector, useDispatch } from 'react-redux';
@@ -626,15 +623,6 @@ function Home({ setHeaderState }) {
               content
             )}
           </div>
-        )}
-        {modalContent && (
-          <Modal visible={modalContent} onCancel={closeModel} footer={null} title={t(modalContent)} centered width='auto'>
-            <div className='max-h-[70vh] overflow-y-auto p-4'>
-              {modalContent === 'home.privacyPolicy' && <PrivacyPolicy />}
-              {modalContent === 'home.termsAndConditions' && <TermsConditions />}
-              {modalContent === 'home.cookiesPolicy' && <CookiesPolicy />}
-            </div>
-          </Modal>
         )}
       </div>
     </CustomLoader>
