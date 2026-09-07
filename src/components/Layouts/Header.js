@@ -6,7 +6,7 @@ function Header() {
   // const { t } = useTranslation();
 
   return (
-    <header className="min-h-screen w-full overflow-hidden  bg-[#f5faff] text-[#183b50]">
+    <header className="min-h-screen w-full overflow-hidden bg-[#f5faff] text-[#183b50]">
       {/* Background */}
       <div className="pointer-events-none absolute -left-32 -top-32 h-80 w-80 rounded-full bg-[#0d9bd7]/10 blur-3xl" />
       <div className="pointer-events-none absolute -right-32 top-20 h-96 w-96 rounded-full bg-[#0d9bd7]/10 blur-3xl" />
