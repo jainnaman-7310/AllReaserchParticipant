@@ -356,11 +356,19 @@ function Home({ setHeaderState }) {
 
   useEffect(() => {
     if (isValidUrl) {
+      // Landing state: keep the welcome header visible until the user starts the survey.
+      setHeaderState(false);
       setContent(
         <div className='row'>
           <div className='col-12 col-md-10 col-sm-12 col-lg-10 col-lg-10 offset-md-1 offset-lg-1 order-2 order-md-1 text-center'>
-            <p className='pb-3'>{t('home.question.carefully')}</p>
-            <button type='submit' className='btn btn-primary' onClick={() => addParticipant()}>
+            <button
+              type='submit'
+              className='btn btn-primary'
+              onClick={() => {
+                setHeaderState(true);
+                addParticipant();
+              }}
+            >
               {t('home.continue')}
             </button>
           </div>

@@ -82,17 +82,6 @@ function Header() {
 
             </div>
 
-            {/* CTA */}
-            <div className="mt-7">
-              <button type="button" className='group inline-flex items-center gap-3 rounded-xl bg-[#0798d3] px-7 py-3.5 text-sm font-bold text-white shadow-lg shadow-[#0798d3]/20 transition-all duration-300 hover:-translate-y-1 hover:bg-[#0789bf] hover:shadow-xl'>
-                Start Survey
-
-                <span className="transition-transform duration-300 group-hover:translate-x-1">
-                  →
-                </span>
-              </button>
-            </div>
-
             {/* Small Note */}
             <p className="mt-4 text-[11px] text-slate-400">
               A few quick questions before you begin.
