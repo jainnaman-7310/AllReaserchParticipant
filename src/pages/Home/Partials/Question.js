@@ -257,62 +257,61 @@ function Question({
       }
     }
   };
+  const displayedCurrent = apiClientId && apiClientId == 46 ? aiCatQuestionCount : currentQuestionIndex + 1;
+  const displayedTotal = apiClientId && apiClientId == 46 ? totalAiCatQuestionCount : totalQuestionsData.length;
+  const progressPercent = displayedTotal > 0 ? Math.min(100, Math.max(0, (displayedCurrent / displayedTotal) * 100)) : 0;
+
   return (
-    <>
-      <div className='question-wrap'>
-        <div className='row'>
-          <div className='col-12 col-md-10 col-sm-12 col-lg-10 order-2 order-md-1'>
-            {getCurrentQuestion && (
-              <Input
-                type={getCurrentQuestion.queryType}
-                questionTitle={getCurrentQuestion.question}
-                questionOptions={getCurrentQuestion.options}
-                saveUserAnswer={saveUserAnswer}
-                userAnswer={userAnswer}
-                userMultiSelectAnswer={userMultiSelectAnswer}
-                setUserMultiselectAnswer={setUserMultiselectAnswer}
-                demoError={setDemo}
-                isCatQuestionAsked={isCatQuestionAsked}
-                isCategoryQuestion={isCategoryQuestion}
-              />
-            )}
+    <div className='survey-question-screen'>
+      <div className='survey-question-panel'>
+        <div className='survey-progress-header'>
+          <div className='survey-progress-track' aria-hidden='true'>
+            <span className='survey-progress-fill' style={{ width: `${progressPercent}%` }} />
           </div>
-          <div className='col-12 col-md-2 col-sm-12 col-lg-2 order-1 order-md-2'>
-            <div className='question-index'>
-              {apiClientId && apiClientId == 46 ? <span>
-                {aiCatQuestionCount}
-                /
-                {totalAiCatQuestionCount}
-              </span> :
-               <span>
-                {currentQuestionIndex + 1}
-                /
-                {totalQuestionsData.length}
-              </span>
-               }
+          <span className='survey-progress-count'>
+            {displayedCurrent}
+            {' / '}
+            {displayedTotal}
+          </span>
+        </div>
+
+        <div className='question-wrap'>
+          <div className='row align-items-start'>
+            <div className='col-12'>
+              {getCurrentQuestion && (
+                <Input
+                  type={getCurrentQuestion.queryType}
+                  questionTitle={getCurrentQuestion.question}
+                  questionOptions={getCurrentQuestion.options}
+                  saveUserAnswer={saveUserAnswer}
+                  userAnswer={userAnswer}
+                  userMultiSelectAnswer={userMultiSelectAnswer}
+                  setUserMultiselectAnswer={setUserMultiselectAnswer}
+                  demoError={setDemo}
+                  isCatQuestionAsked={isCatQuestionAsked}
+                  isCategoryQuestion={isCategoryQuestion}
+                />
+              )}
             </div>
           </div>
         </div>
-      </div>
-      <div className='question-footer py-4 '>
-        <div className='row'>
-          <div className='col-12'>
-            <button type='submit' className='btn btn-primary float-end' onClick={answerSaveHandler}>
-              {/* { apiClientId && apiClientId == 46 ? totalAiCatQuestionCount == aiCatQuestionCount ? t('home.question.submit') : t('home.question.next') :
-              currentQuestionIndex === totalQuestionsData.length - 1 ? t('home.question.submit') : t('home.question.next')} */}
-              {(apiClientId && apiClientId === 46)
-                ? totalAiCatQuestionCount === aiCatQuestionCount
-                  ? t('home.question.submit')
-                  : t('home.question.next')
-                : currentQuestionIndex === totalQuestionsData.length - 1
-                  ? t('home.question.submit')
-                  : t('home.question.next')}
-            </button>
-          </div>
+
+        <div className='question-footer'>
+          <button type='submit' className='btn btn-primary survey-next-button' onClick={answerSaveHandler}>
+            {(apiClientId && apiClientId === 46)
+              ? totalAiCatQuestionCount === aiCatQuestionCount
+                ? t('home.question.submit')
+                : t('home.question.next')
+              : currentQuestionIndex === totalQuestionsData.length - 1
+                ? t('home.question.submit')
+                : t('home.question.next')}
+            <span className='survey-button-arrow'>→</span>
+          </button>
         </div>
       </div>
-    </>
+    </div>
   );
+
 }
 
 export default Question;

@@ -4,14 +4,14 @@ import Header from './Header';
 
 function Layout({ headerState }) {
   return (
-    <>
+    <div className={headerState ? 'survey-app-shell survey-active-shell' : 'survey-app-shell survey-landing-mode'}>
       {!headerState && <Header />}
-      <div className={headerState ? 'w-full h-screen flex flex-col justify-center items-center px-4' : ''}>
+      <div className={headerState ? 'survey-active-stage' : 'survey-landing-stage'}>
         <main className='container'>
           <Outlet />
         </main>
       </div>
-    </>
+    </div>
   );
 }
 

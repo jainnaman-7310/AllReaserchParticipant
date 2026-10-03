@@ -4,92 +4,60 @@ import React from 'react';
 
 function Header() {
   return (
-    <header className="relative w-full overflow-hidden bg-[#f5faff] text-[#183b50]">
-      {/* Background Decorations */}
-      <div className="pointer-events-none absolute -left-20 -top-20 h-64 w-64 rounded-full bg-[#0d9bd7]/10 blur-3xl" />
-      <div className="pointer-events-none absolute -right-20 top-10 h-72 w-72 rounded-full bg-[#0d9bd7]/10 blur-3xl" />
-
-      <div className="relative mx-auto flex h-full w-full max-w-[1200px] flex-col px-5 py-5 sm:px-8 lg:px-12">
-
-        {/* Header */}
-        <div className="flex shrink-0 items-center justify-between">
-          <div className="flex items-center gap-3">
-            <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-[#0798d3] shadow-md shadow-[#0798d3]/20">
-              <span className="text-lg font-black text-white">
-                A
-              </span>
-            </div>
-
-            <div>
-              <p className="text-sm font-extrabold tracking-wide text-[#087eaf]">
-                AllReaserch
-              </p>
-
-              <p className="text-[9px] font-medium uppercase tracking-[2px] text-slate-400">
-                Survey Community
-              </p>
+    <header className="survey-landing-hero">
+      <div className="survey-landing-shell">
+        <div className="survey-landing-nav">
+          <div className="survey-brand">
+            <div className="survey-brand-mark">A</div>
+            <div className="survey-brand-copy">
+              <strong>AllReaserch</strong>
+              <span>Survey Community</span>
             </div>
           </div>
 
-          {/* Privacy */}
-          <div className="hidden items-center gap-2 rounded-full border border-[#dcecf4] bg-white px-4 py-2 shadow-sm sm:flex">
-            <span className="h-2 w-2 rounded-full bg-emerald-400" />
-
-            <span className="text-xs font-semibold text-slate-500">
-              Your privacy matters
-            </span>
+          <div className="survey-privacy-chip">
+            <span className="survey-privacy-dot" />
+            <span>Your privacy matters</span>
           </div>
         </div>
 
-        {/* Main */}
-        <main className="flex min-h-0 flex-1 items-center justify-center">
-          <section className="w-full max-w-3xl text-center">
+        <div className="survey-landing-content">
+          <div className="survey-welcome-badge">
+            <span>✦</span>
+            Welcome to AllReaserch
+          </div>
 
-            {/* Badge */}
-            <div className="mb-4 inline-flex items-center gap-2 rounded-full border border-[#cfe9f5] bg-white px-4 py-2 shadow-sm">
-              <span className="flex h-5 w-5 items-center justify-center rounded-full bg-[#e1f4fb] text-[11px] text-[#0786bb]">
-                ✦
-              </span>
+          <h1>Share Your Opinion</h1>
+          <p className="survey-landing-lead">
+            Your feedback helps businesses make better decisions.
+          </p>
 
-              <span className="text-[10px] font-bold uppercase tracking-[1.5px] text-[#0786bb]">
-                Welcome to AllReaserch
-              </span>
-            </div>
-
-            {/* Heading */}
-            <h1 className="mx-auto max-w-2xl text-4xl font-black leading-[1.08] tracking-tight text-[#0878ad] sm:text-5xl lg:text-6xl">
-              Share Your Opinion
-            </h1>
-
-            {/* Divider */}
-            <div className="mx-auto mt-5 h-1 w-14 rounded-full bg-[#0b9bd5]" />
-
-            {/* Description */}
-            <p className="mx-auto mt-5 max-w-xl text-sm leading-6 text-slate-600 sm:text-base">
-              Your feedback helps businesses make better decisions.
-            </p>
-
-            {/* Survey Info */}
-            <div className="mx-auto mt-6 flex max-w-md flex-wrap items-center justify-center gap-3">
-
-              <div className="rounded-full border border-[#dcecf4] bg-white px-4 py-2 text-xs font-semibold text-slate-500 shadow-sm">
-                🔒 Private
+          <div className="survey-benefit-grid">
+            <div className="survey-benefit-item">
+              <span className="survey-benefit-icon">⌁</span>
+              <div>
+                <strong>Private</strong>
+                <small>Your responses stay confidential.</small>
               </div>
-
-              <div className="rounded-full border border-[#dcecf4] bg-white px-4 py-2 text-xs font-semibold text-slate-500 shadow-sm">
-                ★ Rewarded
-              </div>
-
             </div>
+            <div className="survey-benefit-item">
+              <span className="survey-benefit-icon">✦</span>
+              <div>
+                <strong>Rewarded</strong>
+                <small>Your opinions can earn rewards.</small>
+              </div>
+            </div>
+            <div className="survey-benefit-item">
+              <span className="survey-benefit-icon">◷</span>
+              <div>
+                <strong>Quick & Easy</strong>
+                <small>A simple, focused survey experience.</small>
+              </div>
+            </div>
+          </div>
 
-            {/* Small Note */}
-            <p className="mt-4 text-[11px] text-slate-400">
-              A few quick questions before you begin.
-            </p>
-
-          </section>
-        </main>
-
+          <p className="survey-landing-note">A few quick questions before you begin.</p>
+        </div>
       </div>
     </header>
   );

@@ -393,7 +393,7 @@ function Questionsec1({
   };
 
   return (
-    <div className='flex flex-col justify-center items-center rounded-r-3xl'>
+    <div className='cm-question-card flex flex-col justify-center items-center rounded-r-3xl'>
       <div className='w-full px-4 lg:py-2 pt-6 pb-3'>
         <ProgressBar progress={progress} />
         <div className='text-lg font-semibold text-gray-800 font-poppins lg:pl-0 pl-2 mb-2'>

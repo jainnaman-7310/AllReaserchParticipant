@@ -70,7 +70,7 @@ function Questionpage({
     ? questions[currentQuestionIndex].levels.split(',')
     : '';
   return (
-    <div className='md:flex md:justify-center md:items-center'>
+    <div className='cm-survey-screen md:flex md:justify-center md:items-center'>
       <div className='md:w-[1490px] flex justify-center items-center md:p-2 pl-1'>
         <div className='lg:flex flex-col gap-4 justify-center items-center w-[40%] h-[97vh] bg-gradient-to-tl from-[#1A6508] via-[#1f739d] to-[#0970A4] text-white rounded-l-3xl px-4 hidden'>
           <div className='flex flex-col justify-center items-center'>

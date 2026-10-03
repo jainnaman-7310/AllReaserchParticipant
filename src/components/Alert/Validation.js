@@ -6,8 +6,8 @@ export const AlertBox = (heading, message, t) => {
   confirmAlert({
     customUI: ({ onClose }) => (
       <div className='alert-custom-ui'>
+        <div className='alert-custom-icon'>!</div>
         {heading && <h1>{heading}</h1>}
-
         <p>{message}</p>
         <button
           type='button'

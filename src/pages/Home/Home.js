@@ -359,31 +359,28 @@ function Home({ setHeaderState }) {
       // Landing state: keep the welcome header visible until the user starts the survey.
       setHeaderState(false);
       setContent(
-        <div className='row'>
-          <div className='col-12 col-md-10 col-sm-12 col-lg-10 col-lg-10 offset-md-1 offset-lg-1 order-2 order-md-1 text-center'>
-            <button
-              type='submit'
-              className='btn btn-primary'
-              onClick={() => {
-                setHeaderState(true);
-                addParticipant();
-              }}
-            >
-              {t('home.continue')}
+        <div className='survey-landing-actions'>
+          <button
+            type='submit'
+            className='btn btn-primary survey-start-button'
+            onClick={() => {
+              setHeaderState(true);
+              addParticipant();
+            }}
+          >
+            {t('home.continue')}
+            <span className='survey-button-arrow'>→</span>
+          </button>
+          <div className='survey-legal-links'>
+            <button type='button' onClick={() => openModal('home.privacyPolicy')}>
+              {t('home.privacyPolicy')}
             </button>
-          </div>
-          <div>
-            <div className='fixed bottom-4 right-4 space-x-4'>
-              <button type='button' onClick={() => openModal('home.privacyPolicy')} className='text-blue-500 hover:underline text-sm sm:text-base'>
-                {t('home.privacyPolicy')}
-              </button>
-              <button type='button' onClick={() => openModal('home.termsAndConditions')} className='text-blue-500 hover:underline text-sm sm:text-base'>
-                {t('home.termsAndConditions')}
-              </button>
-              <button type='button' onClick={() => openModal('home.cookiesPolicy')} className='text-blue-500 hover:underline text-sm sm:text-base'>
-                {t('home.cookiesPolicy')}
-              </button>
-            </div>
+            <button type='button' onClick={() => openModal('home.termsAndConditions')}>
+              {t('home.termsAndConditions')}
+            </button>
+            <button type='button' onClick={() => openModal('home.cookiesPolicy')}>
+              {t('home.cookiesPolicy')}
+            </button>
           </div>
         </div>,
       );
