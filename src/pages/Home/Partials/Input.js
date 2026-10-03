@@ -2,6 +2,14 @@ import { useTranslation } from 'react-i18next';
 import { useDispatch } from 'react-redux';
 import { setDemoAlert } from 'slices/ParticipantSlice';
 
+function QuestionTitle({ questionTitle }) {
+  return (
+    <div className='question-title'>
+      <h3>{questionTitle}</h3>
+    </div>
+  );
+}
+
 function Input({
   type, questionTitle, questionOptions, saveUserAnswer, userAnswer, userMultiSelectAnswer, setUserMultiselectAnswer, demoError,
   isCategoryQuestion,
@@ -58,17 +66,11 @@ function Input({
     }
   };
 
-  const QuestionTitle = () => (
-    <div className='question-title'>
-      <h3>{questionTitle}</h3>
-    </div>
-  );
-
   switch (type) {
     case 'text':
       return (
         <div className='question-box'>
-          <QuestionTitle />
+          <QuestionTitle questionTitle={questionTitle} />
           <div className='question-content'>
             <input type='text' className='form-control survey-text-input' value={userAnswer} placeholder='' onChange={setQuestionText} />
             {demoError && (demoError.errorType === 'postal_error' || demoError.errorType === 'zip_error' || demoError.errorType === 'fsa_error') && (
@@ -83,7 +85,7 @@ function Input({
     case 'openended':
       return (
         <div className='question-box'>
-          <QuestionTitle />
+          <QuestionTitle questionTitle={questionTitle} />
           <div className='question-content'>
             <input type='text' className='form-control survey-text-input' value={userAnswer} placeholder='' onChange={(e) => saveUserAnswer(e.target.value)} />
           </div>
@@ -92,7 +94,7 @@ function Input({
     case 'radio':
       return (
         <div className='question-box'>
-          <QuestionTitle />
+          <QuestionTitle questionTitle={questionTitle} />
           <div className='question-content survey-option-list'>
             {questionOptions.map((item, key) => {
               const selected = item._id === userAnswer;
@@ -119,7 +121,7 @@ function Input({
     case 'dropdown':
       return (
         <div className='question-box'>
-          <QuestionTitle />
+          <QuestionTitle questionTitle={questionTitle} />
           <div className='question-content'>
             <select className='form-select survey-select-input' value={userAnswer} onChange={(e) => saveUserAnswer(e.target.value)}>
               <option value=''>Select</option>
@@ -131,7 +133,7 @@ function Input({
     case 'multiselect':
       return (
         <div className='question-box'>
-          <QuestionTitle />
+          <QuestionTitle questionTitle={questionTitle} />
           <div className='question-content survey-option-list'>
             {questionOptions.map((item, key) => {
               const selected = userMultiSelectAnswer && Array.isArray(userMultiSelectAnswer) && userMultiSelectAnswer.includes(item._id);
@@ -159,7 +161,7 @@ function Input({
     case 'range':
       return (
         <div className='question-box'>
-          <QuestionTitle />
+          <QuestionTitle questionTitle={questionTitle} />
           <div className='question-content'>
             <input type='text' className='form-control survey-text-input' value={userAnswer} placeholder='' onChange={setQuestionrange} />
             {demoError && demoError.errorType === 'age_error' && (

@@ -64,7 +64,11 @@ function AiQuestion({
           <div className='survey-progress-track'>
             <span className='survey-progress-fill' style={{ width: `${progress}%` }} />
           </div>
-          <span className='survey-progress-count'>{current} / {total}</span>
+          <span className='survey-progress-count'>
+            {current}
+            {' / '}
+            {total}
+          </span>
         </div>
         <h3>{`${aiQuestion[currentIndex].question}`}</h3>
         <input
@@ -80,7 +84,8 @@ function AiQuestion({
         />
         <div className='survey-special-actions'>
           <button type='submit' onClick={handleSubmit} className='btn btn-primary'>
-            {t('home.question.submit')} <span className='survey-button-arrow'>→</span>
+            {t('home.question.submit')}
+            <span className='survey-button-arrow'>→</span>
           </button>
         </div>
       </div>
