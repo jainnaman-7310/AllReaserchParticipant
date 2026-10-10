@@ -2,8 +2,9 @@
 /* eslint-disable comma-dangle */
 /* eslint-disable no-unused-vars */
 /* eslint-disable no-debugger */
-import React, { useEffect, useState } from 'react';
-import { Modal } from 'antd';
+import React, {
+  lazy, Suspense, useEffect, useMemo, useState,
+} from 'react';
 import { setBrowserData, redirectToUrl } from 'utils/utils';
 import { requestData } from 'utils/helpers';
 import * as rdd from 'react-device-detect';
@@ -21,7 +22,7 @@ import {
   getRouterV4AIQuestion,
   getRouterV4AINextQuestion,
 } from 'slices/ParticipantSlice';
-import { getCMQuestionnaire, getRandomAIQuestion, submitRandomQuestionAnswer } from 'slices/ParticipantAnswerSlice';
+import { getRandomAIQuestion, submitRandomQuestionAnswer } from 'slices/ParticipantAnswerSlice';
 import { setScreenerData } from 'utils/screenerData';
 import CustomLoader from 'components/Utility/CustomLoader';
 import { useTranslation } from 'react-i18next';
@@ -44,20 +45,50 @@ import {
   RASIK,
   TOLUNA,
 } from 'config/constants';
-import Question from './Partials/Question';
-import RandomQuestionPage from '../RandomQuestionAsked/index';
-import Questionpage from '../CM-Questionnaire/Questionpage';
-import AiQuestion from './Partials/AiQuestion';
+
+const START_SURVEY_BUTTON_CLASS = [
+  'inline-flex h-12 min-w-[210px] items-center justify-center gap-2 rounded-xl bg-teal-700 px-6',
+  'text-[15px] font-semibold text-white shadow-[0_10px_22px_rgba(15,127,131,0.18)] transition',
+  'hover:bg-teal-800 focus:outline-none focus:ring-4 focus:ring-teal-700/15',
+].join(' ');
+
+const Question = lazy(() => import('./Partials/Question'));
+const RandomQuestionPage = lazy(() => import('../RandomQuestionAsked/index'));
+const AiQuestion = lazy(() => import('./Partials/AiQuestion'));
 
 const cookies = new Cookies();
+
+const EXCLUDED_VENDOR_IDS = [
+  PASS,
+  SPLENDED,
+  UNIMARKETV2,
+  MARKETMIRROR,
+  MARKETXCEL,
+  HALLAT,
+  PANGEAFORUM,
+  KYA,
+  RASIK,
+  TOLUNA,
+];
+
+function SurveyModuleFallback() {
+  return (
+    <div className='flex min-h-[55vh] items-center justify-center'>
+      <div className='flex items-center gap-3 text-sm font-medium text-slate-500'>
+        <span className='h-6 w-6 animate-spin rounded-full border-2 border-slate-200 border-t-teal-700' />
+        Preparing survey...
+      </div>
+    </div>
+  );
+}
 // import { getData } from 'slices/TestSlice';
 // comment added for test
 
 function Home({ setHeaderState }) {
   const { t } = useTranslation();
   const dispatch = useDispatch();
-  const request = requestData(window);
-  const browserData = setBrowserData(rdd, request);
+  const request = useMemo(() => requestData(window), []);
+  const browserData = useMemo(() => setBrowserData(rdd, request), [request]);
   const [browserInfo, setBrowserInfo] = useState(browserData);
   const [userLandingUrl, setUserLandingUrl] = useState(request.userLandingUrl);
   const [studyId, setStudyId] = useState(request.studyId);
@@ -82,11 +113,9 @@ function Home({ setHeaderState }) {
   const [isValidUrl, setValidUrl] = useState(0);
   const [content, setContent] = useState('');
   const [isLoading, setLoding] = useState(false);
-  const [showCMQuestions, setShowCMQuestions] = useState(false);
-  const [cmQuestions, setCMQuestions] = useState(false);
+  const [surveyStarted, setSurveyStarted] = useState(false);
   const [replyID, setReplyID] = useState(null);
   const [showRandomQuestions, setShowRandomQuestions] = useState(false);
-  const [requestForCMQuestion, setRequestForCMQuestion] = useState(true);
   const [isRandomQuestionCalled, setIsRandomQuestionCalled] = useState(false);
   const [aiQuestion, setAiQuestion] = useState([]);
   const [modalContent, setModalContent] = useState(null);
@@ -105,15 +134,13 @@ function Home({ setHeaderState }) {
 
   // const [participantApiData, setParticipantApiData] = useState(false);
   const getParticipantData = useSelector((particpantState) => particpantState.ParticipantSlice.getParticipantData);
-  const getParticipantDataLoading = useSelector((particpantState) => particpantState.ParticipantSlice.loading);
   const createParticipantResult = useSelector((particpantState) => particpantState.ParticipantSlice.createParticipantResponse);
   const createParticipantResultLoading = useSelector((particpantState) => particpantState.ParticipantSlice.loading);
   const participantFailedInScreenersResult = useSelector((participantAnswerState) => participantAnswerState.ParticipantAnswerSlice.participantFailedInScreenersResponse);
   const participantFailedInScreenersResultLoading = useSelector((participantAnswerState) => participantAnswerState.ParticipantAnswerSlice.loading);
 
-  const CMQuestionnaireResponseResult = useSelector((participantAnswerState) => participantAnswerState.ParticipantAnswerSlice.CMQuestionnaireResponse);
   const RandomQuestionAskedResponse = useSelector((randomQuestionState) => randomQuestionState.ParticipantAnswerSlice.RandomQuestionResponse);
-  const CMQuestionnaireResponseResultLoading = useSelector((participantAnswerState) => participantAnswerState.ParticipantAnswerSlice.loading);
+  const participantAnswerLoading = useSelector((participantAnswerState) => participantAnswerState.ParticipantAnswerSlice.loading);
   const getAIQuestionResponse = useSelector((participantAnswerState) => participantAnswerState.ParticipantAnswerSlice.submitRandomQuestionAnswerResponse);
   const requiredResponses = useSelector((particpantState) => particpantState.ParticipantSlice.requiredResponses);
 
@@ -121,39 +148,32 @@ function Home({ setHeaderState }) {
   const routerV4AINextQuestion = useSelector((particpantState) => particpantState.ParticipantSlice.getRouterV4AINextQuestion);
   const participantsDemographicsData = useSelector((particpantState) => particpantState.ParticipantSlice.participantsDemographics);
   const currentURL = window.location.href;
-  const EXCLUDED_VENDOR_IDS = [
-    PASS, // for PAAS API
-    SPLENDED, // for Splendid API
-    UNIMARKETV2, // for UnimarketV2 API
-    MARKETMIRROR, // for MARKETMIRROR API
-    MARKETXCEL, // for MARKETXCEL API
-    HALLAT, // for HALLAT API
-    // FUN, // for FUN API
-    // SUNSHINE, // for SUNSHINE API
-    PANGEAFORUM, // for PANGEAFORUM API
-    KYA, // for KYA API
-    // DIVERGENT, // for DIVERGENT API
-    // GNL, // for GNL API
-    // BIG_WAVE, // for BIG_WAVE API
-    // ADVUEMEDIA, // for ADVUEMEDIA API
-    RASIK, // for RASIK API
-    TOLUNA, // for TOLUNA API
-  ];
 
   useEffect(() => {
+    let idleId;
+    let timerId;
+    let cancelled = false;
+
     const detectBot = async () => {
       try {
         const result = await botDetector();
-        setBotDetectionResult(result);
+        if (!cancelled) setBotDetectionResult(result);
       } catch (error) {
-        // console.error('Error detecting bot:', error);
+        // Non-critical: participant flow continues if bot detection is unavailable.
       }
     };
 
-    detectBot();
-    browserFingerprints().then((result) => {
-      setUniqueId(result);
-    });
+    if (typeof window.requestIdleCallback === 'function') {
+      idleId = window.requestIdleCallback(detectBot, { timeout: 300 });
+    } else {
+      timerId = window.setTimeout(detectBot, 0);
+    }
+
+    return () => {
+      cancelled = true;
+      if (idleId && typeof window.cancelIdleCallback === 'function') window.cancelIdleCallback(idleId);
+      if (timerId) window.clearTimeout(timerId);
+    };
   }, []);
 
   const updateClientAppRedirectHandler = (clientDataToUpdate) => {
@@ -184,25 +204,39 @@ function Home({ setHeaderState }) {
     }
   };
 
-  // call first participant initial data
-  useEffect(async () => {
-    if (vendorId && browserInfo && userLandingUrl) {
-      let cookieUserIds = uniqueId;
-      if (!uniqueId) {
-        cookieUserIds = await browserFingerprints();
-        setUniqueId(cookieUserIds);
+  // Initial participant bootstrap. The three existing API calls intentionally
+  // remain parallel; only the duplicate fingerprint calculation is removed.
+  useEffect(() => {
+    let cancelled = false;
+
+    const initializeParticipant = async () => {
+      if (vendorId && browserInfo && userLandingUrl) {
+        let cookieUserIds = uniqueId;
+        if (!cookieUserIds) {
+          cookieUserIds = await browserFingerprints();
+          if (cancelled) return;
+          setUniqueId(cookieUserIds);
+        }
+
+        const particiapntInitialDataParams = {
+          vid: vendorId,
+          hash: '',
+          userLandingUrl,
+          cookieUserid: cookieUserIds || cookies.get('userId'),
+          userSpId: localStorage.getItem('spfjkshdfjbnvcbj'),
+        };
+
+        dispatch(getParticipantInitialData(particiapntInitialDataParams));
+        dispatch(createParticipantUserEntry({ vendorId, browserInfo, userLandingUrl }));
+        dispatch(createParticipantUserEntryOnly({ vendorId, browserInfo, userLandingUrl }));
       }
-      const particiapntInitialDataParams = {
-        vid: vendorId,
-        hash: '',
-        userLandingUrl,
-        cookieUserid: cookieUserIds || cookies.get('userId'),
-        userSpId: localStorage.getItem('spfjkshdfjbnvcbj'),
-      };
-      dispatch(getParticipantInitialData(particiapntInitialDataParams));
-      dispatch(createParticipantUserEntry({ vendorId, browserInfo, userLandingUrl }));
-      dispatch(createParticipantUserEntryOnly({ vendorId, browserInfo, userLandingUrl }));
-    }
+    };
+
+    initializeParticipant();
+
+    return () => {
+      cancelled = true;
+    };
   }, [vendorId, browserInfo, userLandingUrl]);
 
   const addParticipant = async (isRouterSubmitted = false) => {
@@ -213,14 +247,6 @@ function Home({ setHeaderState }) {
           study_id: studyId,
           TID: vendorId,
           userUrl: userLandingUrl,
-          userSpId: localStorage.getItem('spfjkshdfjbnvcbj'),
-        }),
-      );
-    } else if (requestForCMQuestion) {
-      dispatch(
-        getCMQuestionnaire({
-          study_id: studyId,
-          TID: vendorId,
           userSpId: localStorage.getItem('spfjkshdfjbnvcbj'),
         }),
       );
@@ -310,27 +336,6 @@ function Home({ setHeaderState }) {
   };
 
   useEffect(() => {
-    if (CMQuestionnaireResponseResult && CMQuestionnaireResponseResult !== '') {
-      if (CMQuestionnaireResponseResult.success) {
-        setRequestForCMQuestion(true);
-        setShowCMQuestions(true);
-        setHeaderState(true);
-        setCMQuestions(CMQuestionnaireResponseResult.result);
-        // navigate('/cm-questionnaire', {
-        //   state: {
-        //     result: CMQuestionnaireResponseResult.result,
-        //     studyId,
-        //     vendorId
-        //   }
-        // });
-      } else {
-        setRequestForCMQuestion(false);
-        addParticipant();
-      }
-    }
-  }, [CMQuestionnaireResponseResult]);
-
-  useEffect(() => {
     if (getAIQuestionResponse && getAIQuestionResponse !== '') {
       // eslint-disable-next-line no-prototype-builtins
       if (getAIQuestionResponse.success && getAIQuestionResponse.hasOwnProperty('isRedirect') && getAIQuestionResponse.redirectUrl) {
@@ -359,26 +364,27 @@ function Home({ setHeaderState }) {
       // Landing state: keep the welcome header visible until the user starts the survey.
       setHeaderState(false);
       setContent(
-        <div className='survey-landing-actions'>
+        <div className='flex flex-col items-center gap-3 px-5 pb-5 text-center'>
           <button
             type='submit'
-            className='btn btn-primary survey-start-button'
+            className={START_SURVEY_BUTTON_CLASS}
             onClick={() => {
+              setSurveyStarted(true);
               setHeaderState(true);
               addParticipant();
             }}
           >
             {t('home.continue')}
-            <span className='survey-button-arrow'>→</span>
+            <span className='text-base'>→</span>
           </button>
-          <div className='survey-legal-links'>
-            <button type='button' onClick={() => openModal('home.privacyPolicy')}>
+          <div className='mt-1 flex flex-wrap justify-center gap-4'>
+            <button className='border-0 bg-transparent p-0 text-[11px] text-slate-500 hover:text-teal-700 hover:underline' type='button' onClick={() => openModal('home.privacyPolicy')}>
               {t('home.privacyPolicy')}
             </button>
-            <button type='button' onClick={() => openModal('home.termsAndConditions')}>
+            <button className='border-0 bg-transparent p-0 text-[11px] text-slate-500 hover:text-teal-700 hover:underline' type='button' onClick={() => openModal('home.termsAndConditions')}>
               {t('home.termsAndConditions')}
             </button>
-            <button type='button' onClick={() => openModal('home.cookiesPolicy')}>
+            <button className='border-0 bg-transparent p-0 text-[11px] text-slate-500 hover:text-teal-700 hover:underline' type='button' onClick={() => openModal('home.cookiesPolicy')}>
               {t('home.cookiesPolicy')}
             </button>
           </div>
@@ -408,12 +414,6 @@ function Home({ setHeaderState }) {
           if (Object.prototype.hasOwnProperty.call(createParticipantResult, 'isScreener')) {
             if (createParticipantResult.demographicData.length === 0 && createParticipantResult.screenerRangeData.length === 0 && isAskQuestion) {
               setPID(createParticipantResult.PID);
-              // dispatch(
-              //   getCMQuestionnaire({
-              //     study_id: studyId,
-              //     TID: vendorId,
-              //   }),
-              // );
 
               if (apiClientId && apiClientId === 46 && isAiQuestionAksedFirstTime === false) {
                 addParticipantAiQuestion();
@@ -457,11 +457,6 @@ function Home({ setHeaderState }) {
     }
   }, [participantFailedInScreenersResult]);
 
-  const onCMComplete = () => {
-    addParticipant();
-    setRequestForCMQuestion(false);
-    setShowCMQuestions(false);
-  };
   const submitRandomQuestion = (data) => {
     data.userId = userId;
     data.userLandingUrl = userLandingUrl;
@@ -583,17 +578,30 @@ function Home({ setHeaderState }) {
     }
   }, [routerV4AINextQuestion]);
 
+  const showActiveLoader = isLoading || (surveyStarted && (createParticipantResultLoading || participantFailedInScreenersResultLoading || participantAnswerLoading));
+
   return (
-    <CustomLoader show={getParticipantDataLoading || createParticipantResultLoading || participantFailedInScreenersResultLoading || CMQuestionnaireResponseResultLoading || isLoading}>
-      <div>
-        {showCMQuestions ? (
-          <Questionpage result={cmQuestions} studyId={studyId} vendorId={vendorId} onCMComplete={onCMComplete} />
-        ) : showRandomQuestions ? (
-          <RandomQuestionPage questionData={randomQuestion} studyId={studyId} vendorId={vendorId} submitRandomQuestion={submitRandomQuestion} />
+    <CustomLoader show={showActiveLoader}>
+      <Suspense fallback={<SurveyModuleFallback />}>
+        {showRandomQuestions ? (
+          <RandomQuestionPage
+            questionData={randomQuestion}
+            studyId={studyId}
+            vendorId={vendorId}
+            submitRandomQuestion={submitRandomQuestion}
+          />
         ) : (
-          <div className='col-12 col-lg-8 offset-lg-2 col-md-11 offset-md-1 col-sm-12 pb-5'>
+          <div className='mx-auto w-full max-w-4xl pb-5'>
             {aiQuestion.length > 0 ? (
-              <AiQuestion userId={userId} userLandingUrl={userLandingUrl} studyId={studyId} vendorId={vendorId} aiQuestion={aiQuestion} moveToScreener={getScreener} PID={PID} />
+              <AiQuestion
+                userId={userId}
+                userLandingUrl={userLandingUrl}
+                studyId={studyId}
+                vendorId={vendorId}
+                aiQuestion={aiQuestion}
+                moveToScreener={getScreener}
+                PID={PID}
+              />
             ) : totalQuestionsData && totalQuestionsData.length > 0 ? (
               <Question
                 totalQuestionsData={totalQuestionsData}
@@ -629,7 +637,7 @@ function Home({ setHeaderState }) {
             )}
           </div>
         )}
-      </div>
+      </Suspense>
     </CustomLoader>
   );
 }

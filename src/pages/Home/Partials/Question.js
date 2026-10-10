@@ -15,6 +15,12 @@ import * as ZIP_RULES from '../zip_config/index';
 import { getValidatePostalCodeApi } from 'services/participantService';
 import { useState } from 'react';
 
+const QUESTION_ACTION_BUTTON_CLASS = [
+  'inline-flex h-11 w-full items-center justify-center gap-2 rounded-xl bg-teal-700 px-5',
+  'text-sm font-semibold text-white shadow-[0_9px_20px_rgba(15,127,131,0.15)] transition',
+  'hover:bg-teal-800 focus:outline-none focus:ring-4 focus:ring-teal-700/15 sm:w-auto sm:min-w-[132px]',
+].join(' ');
+
 function Question({
   totalQuestionsData,
   setCurrentQuestionIndex,
@@ -151,9 +157,7 @@ function Question({
       let correctAnswers = 1;
       const langCode = data?.lang_code; // getting project language code to validate zip code 
       const countryCode = getCountryCode(langCode);
-      debugger;
       if (ZIP_RULES.ZIP_DEMO_IDS.includes(getCurrentQuestion.demographicId) && getCurrentQuestion.queryType === 'text') {
-      // if (getCurrentQuestion.queryType === 'text' && getCurrentQuestion.demographicId === '620196Demo1562404395959' && (langCode === 'English-NZ' ? !isValidNZZipCode(String(data.option_text)) : !isValidUSZipCode(String(data.option_text)))) {
 
         if (ZIP_RULES.DB_POSTAL_COUNTRIES.includes(countryCode)) {
           const isValid = await validatePostalWarning({
@@ -172,7 +176,11 @@ function Question({
         // return;
       }
       // eslint-disable-next-line max-len
-      const requiresPostalValidation = getCurrentQuestion.queryId === '6620196Demo15624043959596query15624044216941' || getCurrentQuestion._id === '6620196Demo15624043959596query15624044216941' || getCurrentQuestion.queryId === '4654';
+      const requiresPostalValidation = (
+        getCurrentQuestion.queryId === '6620196Demo15624043959596query15624044216941'
+        || getCurrentQuestion._id === '6620196Demo15624043959596query15624044216941'
+        || getCurrentQuestion.queryId === '4654'
+      );
       if (getCurrentQuestion.queryType === 'text' && requiresPostalValidation && (String(getCurrentQuestion.qid) === '1095' || String(getCurrentQuestion.qid) === '4654')) {
         const isValid = await validatePostalWarning({
           value: data.option_text,
@@ -262,42 +270,44 @@ function Question({
   const progressPercent = displayedTotal > 0 ? Math.min(100, Math.max(0, (displayedCurrent / displayedTotal) * 100)) : 0;
 
   return (
-    <div className='survey-question-screen'>
-      <div className='survey-question-panel'>
-        <div className='survey-progress-header'>
-          <div className='survey-progress-track' aria-hidden='true'>
-            <span className='survey-progress-fill' style={{ width: `${progressPercent}%` }} />
+    <div className='w-full'>
+      <div className='mx-auto w-full max-w-[880px]'>
+        <div className='mb-3 flex items-center gap-3.5'>
+          <div className='relative h-1.5 flex-1 overflow-hidden rounded-full bg-slate-200' aria-hidden='true'>
+            <span className='block h-full rounded-full bg-teal-700 transition-[width] duration-300' style={{ width: `${progressPercent}%` }} />
           </div>
-          <span className='survey-progress-count'>
+          <span className='min-w-[54px] text-right text-xs font-bold text-slate-600'>
             {displayedCurrent}
             {' / '}
             {displayedTotal}
           </span>
         </div>
 
-        <div className='question-wrap'>
-          <div className='row align-items-start'>
-            <div className='col-12'>
-              {getCurrentQuestion && (
-                <Input
-                  type={getCurrentQuestion.queryType}
-                  questionTitle={getCurrentQuestion.question}
-                  questionOptions={getCurrentQuestion.options}
-                  saveUserAnswer={saveUserAnswer}
-                  userAnswer={userAnswer}
-                  userMultiSelectAnswer={userMultiSelectAnswer}
-                  setUserMultiselectAnswer={setUserMultiselectAnswer}
-                  demoError={setDemo}
-                  isCatQuestionAsked={isCatQuestionAsked}
-                  isCategoryQuestion={isCategoryQuestion}
-                />
-              )}
-            </div>
+        <div className='min-h-[280px] overflow-hidden rounded-[18px] border border-slate-200 bg-white shadow-[0_18px_48px_rgba(16,24,40,0.08)] sm:min-h-[300px]'>
+          <div className='px-4 py-6 sm:px-7 sm:py-8 lg:px-10'>
+            {getCurrentQuestion && (
+              <Input
+                type={getCurrentQuestion.queryType}
+                questionTitle={getCurrentQuestion.question}
+                questionOptions={getCurrentQuestion.options}
+                saveUserAnswer={saveUserAnswer}
+                userAnswer={userAnswer}
+                userMultiSelectAnswer={userMultiSelectAnswer}
+                setUserMultiselectAnswer={setUserMultiselectAnswer}
+                demoError={setDemo}
+                isCatQuestionAsked={isCatQuestionAsked}
+                isCategoryQuestion={isCategoryQuestion}
+              />
+            )}
           </div>
         </div>
 
-        <div className='question-footer'>
-          <button type='submit' className='btn btn-primary survey-next-button' onClick={answerSaveHandler}>
+        <div className='mt-4 flex justify-end'>
+          <button
+            type='submit'
+            className={QUESTION_ACTION_BUTTON_CLASS}
+            onClick={answerSaveHandler}
+          >
             {(apiClientId && apiClientId === 46)
               ? totalAiCatQuestionCount === aiCatQuestionCount
                 ? t('home.question.submit')
@@ -305,7 +315,7 @@ function Question({
               : currentQuestionIndex === totalQuestionsData.length - 1
                 ? t('home.question.submit')
                 : t('home.question.next')}
-            <span className='survey-button-arrow'>→</span>
+            <span className='text-base leading-none'>→</span>
           </button>
         </div>
       </div>

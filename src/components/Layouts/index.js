@@ -4,10 +4,10 @@ import Header from './Header';
 
 function Layout({ headerState }) {
   return (
-    <div className={headerState ? 'survey-app-shell survey-active-shell' : 'survey-app-shell survey-landing-mode'}>
+    <div className='min-h-screen bg-[#f6f7f9] text-slate-900'>
       {!headerState && <Header />}
-      <div className={headerState ? 'survey-active-stage' : 'survey-landing-stage'}>
-        <main className='container'>
+      <div className={headerState ? 'flex min-h-screen items-start px-3 py-5 sm:items-center sm:px-5 sm:py-8' : 'w-full'}>
+        <main className={headerState ? 'mx-auto w-full max-w-6xl' : 'w-full'}>
           <Outlet />
         </main>
       </div>

@@ -16,6 +16,7 @@ i18n
   .init({
     supportedLngs: '',
     fallbackLng: 'en',
+    load: 'languageOnly',
     parseMissingKeyHandler(key) {
       return `???${key}???`;
     },

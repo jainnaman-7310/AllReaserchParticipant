@@ -68,12 +68,6 @@ export const getExposeClientParticipantDataApi = (data) => client().get('getExpo
   params: data,
 });
 
-export const getCMQuestionnaireApi = (data) => client().get('chuck-miller/get-questions', {
-  params: data,
-});
-
-export const saveCMResponseApi = (data) => client().post('chuck-miller/submit-response', data);
-
 export const getRandomQuestionApi = (data) => client().get('getrandomai-question', {
   params: data,
 });

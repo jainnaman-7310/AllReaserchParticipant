@@ -2,7 +2,11 @@
 /* eslint-disable no-debugger */
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import {
-  saveParticipantReplyV2Api, participantFailedInScreenersV2Api, checkScreenerForQuotaRouterV2Api, getCMQuestionnaireApi, saveCMResponseApi, getRandomQuestionApi, submitRandomQuestionApi,
+  saveParticipantReplyV2Api,
+  participantFailedInScreenersV2Api,
+  checkScreenerForQuotaRouterV2Api,
+  getRandomQuestionApi,
+  submitRandomQuestionApi,
 } from 'services/participantService';
 import { redirectToCalibr8 } from 'utils/calibr8Redirect';
 import Cookies from 'universal-cookie';
@@ -25,8 +29,6 @@ export const saveParticipantReply = createAsyncThunk('paricipant/saveParticipant
     data.userSpId = localStorage.getItem('spfjkshdfjbnvcbj');
     const res = await saveParticipantReplyV2Api(data);
 
-    // Server-side Calibr8 gate blocked this step: the backend requires the user
-    // to complete Calibr8 before continuing the question flow.
     if (res.data?.calibr8Required && res.data?.redirectUrl) {
       redirectToCalibr8(res.data.redirectUrl);
       return res.data;
@@ -89,34 +91,6 @@ export const checkScreenerForQuota = createAsyncThunk('paricipant/checkScreenerF
   }
 });
 
-export const getCMQuestionnaire = createAsyncThunk('paricipant/CMQuestionnaire', async (data, { rejectWithValue }) => {
-  try {
-    const newUserId = cookies.get('userId');
-    data.cookie_id = newUserId;
-    const res = await getCMQuestionnaireApi(data);
-    return res.data;
-  } catch (err) {
-    if (!err.response) {
-      throw err;
-    }
-    return rejectWithValue(err.response.data);
-  }
-});
-
-export const saveCMQuestionnaire = createAsyncThunk('paricipant/saveCMQuestionnaireResponse', async (data, { rejectWithValue }) => {
-  try {
-    const newUserId = cookies.get('userId');
-    data.cookie_id = newUserId;
-    const res = await saveCMResponseApi(data);
-    return res.data;
-  } catch (err) {
-    if (!err.response) {
-      throw err;
-    }
-    return rejectWithValue(err.response.data);
-  }
-});
-
 export const getRandomAIQuestion = createAsyncThunk('paricipant/getrandomQuestion', async (data, { rejectWithValue }) => {
   try {
     const newUserId = cookies.get('userId');
@@ -145,61 +119,76 @@ export const submitRandomQuestionAnswer = createAsyncThunk('paricipant/submit-ra
   }
 });
 
+const markPending = (state) => {
+  state.pendingRequests += 1;
+  state.loading = true;
+};
+
+const markSettled = (state) => {
+  state.pendingRequests = Math.max(0, state.pendingRequests - 1);
+  state.loading = state.pendingRequests > 0;
+};
+
 const participantAnswerSlice = createSlice({
   name: 'participantAnswer',
   initialState: {
-    response: '', loading: false, participantFailedInScreenersResponse: '', CMQuestionnaireResponse: '', RandomQuestionResponse: '', submitRandomQuestionAnswerResponse: '',
+    response: '',
+    loading: false,
+    pendingRequests: 0,
+    participantFailedInScreenersResponse: '',
+    RandomQuestionResponse: '',
+    submitRandomQuestionAnswerResponse: '',
   },
   extraReducers: {
-    [participantFailedInScreeners.pending]: (state, action) => {
-      state.loading = true;
+    [participantFailedInScreeners.pending]: (state) => {
+      markPending(state);
     },
     [participantFailedInScreeners.fulfilled]: (state, action) => {
-      state.loading = false;
+      markSettled(state);
       state.participantFailedInScreenersResponse = action.payload;
     },
-    [checkScreenerForQuota.pending]: (state, action) => {
-      state.loading = true;
+    [participantFailedInScreeners.rejected]: (state) => {
+      markSettled(state);
+    },
+    [checkScreenerForQuota.pending]: (state) => {
+      markPending(state);
     },
     [checkScreenerForQuota.fulfilled]: (state, action) => {
-      state.loading = false;
+      markSettled(state);
       state.participantFailedInScreenersResponse = action.payload;
     },
-    [getCMQuestionnaire.pending]: (state, action) => {
-      state.loading = true;
+    [checkScreenerForQuota.rejected]: (state) => {
+      markSettled(state);
     },
-    [getCMQuestionnaire.fulfilled]: (state, action) => {
-      state.loading = false;
-      state.CMQuestionnaireResponse = action.payload;
-    },
-    [saveCMQuestionnaire.pending]: (state, action) => {
-      state.loading = true;
-    },
-    [saveCMQuestionnaire.fulfilled]: (state, action) => {
-      state.loading = false;
-      state.saveCMQuestionnaireResponse = action.payload;
-    },
-    [getRandomAIQuestion.pending]: (state, action) => {
-      state.loading = true;
+    [getRandomAIQuestion.pending]: (state) => {
+      markPending(state);
     },
     [getRandomAIQuestion.fulfilled]: (state, action) => {
-      state.loading = false;
+      markSettled(state);
       state.RandomQuestionResponse = action.payload;
     },
-    [submitRandomQuestionAnswer.pending]: (state, action) => {
-      state.loading = true;
+    [getRandomAIQuestion.rejected]: (state) => {
+      markSettled(state);
+    },
+    [submitRandomQuestionAnswer.pending]: (state) => {
+      markPending(state);
     },
     [submitRandomQuestionAnswer.fulfilled]: (state, action) => {
-      state.loading = false;
+      markSettled(state);
       state.submitRandomQuestionAnswerResponse = action.payload;
     },
-    [saveParticipantReply.pending]: (state, action) => {
-      state.loading = true;
+    [submitRandomQuestionAnswer.rejected]: (state) => {
+      markSettled(state);
     },
-    [saveParticipantReply.fulfilled]: (state, action) => {
-      state.loading = false;
+    [saveParticipantReply.pending]: (state) => {
+      markPending(state);
     },
-
+    [saveParticipantReply.fulfilled]: (state) => {
+      markSettled(state);
+    },
+    [saveParticipantReply.rejected]: (state) => {
+      markSettled(state);
+    },
   },
 });
 

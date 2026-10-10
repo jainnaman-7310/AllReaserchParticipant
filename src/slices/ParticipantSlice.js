@@ -191,11 +191,22 @@ export const getRouterV4AINextQuestion = createAsyncThunk('api/getRouterV4AINext
   }
 });
 
+const markPending = (state) => {
+  state.pendingRequests += 1;
+  state.loading = true;
+};
+
+const markSettled = (state) => {
+  state.pendingRequests = Math.max(0, state.pendingRequests - 1);
+  state.loading = state.pendingRequests > 0;
+};
+
 const createParticipantUserEntrySlice = createSlice({
   name: 'participantSlice',
   initialState: {
     response: '',
     loading: false,
+    pendingRequests: 0,
     createParticipantResponse: '',
     getParticipantData: '',
     createParticipantUserEntry,
@@ -205,75 +216,103 @@ const createParticipantUserEntrySlice = createSlice({
     setDemoAlert: {},
   },
   extraReducers: {
-    [createParticipant.pending]: (state, action) => {
-      state.loading = true;
+    [createParticipant.pending]: (state) => {
+      markPending(state);
     },
     [createParticipant.fulfilled]: (state, action) => {
-      state.loading = false;
+      markSettled(state);
       state.createParticipantResponse = action.payload;
     },
-    [participantsDemographics.pending]: (state, action) => {
-      state.loading = true;
+    [createParticipant.rejected]: (state) => {
+      markSettled(state);
+    },
+    [participantsDemographics.pending]: (state) => {
+      markPending(state);
     },
     [participantsDemographics.fulfilled]: (state, action) => {
-      state.loading = false;
+      markSettled(state);
       state.createParticipantResponse = action.payload;
     },
-    [getParticipantInitialData.pending]: (state, action) => {
-      state.loading = true;
+    [participantsDemographics.rejected]: (state) => {
+      markSettled(state);
+    },
+    [getParticipantInitialData.pending]: (state) => {
+      markPending(state);
     },
     [getParticipantInitialData.fulfilled]: (state, action) => {
-      state.loading = false;
+      markSettled(state);
       state.getParticipantData = action.payload;
       state.requiredResponses = [...state.requiredResponses, action.payload];
     },
-    [createParticipantUserEntry.pending]: (state, action) => {
-      state.loading = true;
+    [getParticipantInitialData.rejected]: (state) => {
+      markSettled(state);
+    },
+    [createParticipantUserEntry.pending]: (state) => {
+      markPending(state);
     },
     [createParticipantUserEntry.fulfilled]: (state, action) => {
-      state.loading = false;
+      markSettled(state);
       state.requiredResponses = [...state.requiredResponses, action.payload];
       state.createParticipantUserEntry = action.payload;
     },
-    [createParticipantUserEntryOnly.pending]: (state, action) => {
-      state.loading = true;
+    [createParticipantUserEntry.rejected]: (state) => {
+      markSettled(state);
+    },
+    [createParticipantUserEntryOnly.pending]: (state) => {
+      markPending(state);
     },
     [createParticipantUserEntryOnly.fulfilled]: (state, action) => {
-      state.loading = false;
+      markSettled(state);
       state.requiredResponses = [...state.requiredResponses, action.payload];
       state.createParticipantUserEntryOnly = action.payload;
     },
+    [createParticipantUserEntryOnly.rejected]: (state) => {
+      markSettled(state);
+    },
     [getAIQuestion.pending]: (state) => {
-      state.loading = true;
+      markPending(state);
     },
     [getAIQuestion.fulfilled]: (state, action) => {
-      state.loading = false;
+      markSettled(state);
       state.aiQuestionData = action.payload.data;
     },
+    [getAIQuestion.rejected]: (state) => {
+      markSettled(state);
+    },
     [getRouterV4AIQuestion.pending]: (state) => {
-      state.loading = true;
+      markPending(state);
     },
     [getRouterV4AIQuestion.fulfilled]: (state, action) => {
-      state.loading = false;
+      markSettled(state);
       state.getRouterV4AIQuestion = action.payload;
     },
+    [getRouterV4AIQuestion.rejected]: (state) => {
+      markSettled(state);
+    },
     [getRouterV4AINextQuestion.pending]: (state) => {
-      state.loading = true;
+      markPending(state);
     },
     [getRouterV4AINextQuestion.fulfilled]: (state, action) => {
-      state.loading = false;
+      markSettled(state);
       state.getRouterV4AINextQuestion = action.payload;
     },
-    [getAiQuestionReviewed.pending]: (state) => {
-      state.loading = true;
+    [getRouterV4AINextQuestion.rejected]: (state) => {
+      markSettled(state);
     },
-    [getAiQuestionReviewed.fulfilled]: (state, action) => {
-      state.loading = false;
+    [getAiQuestionReviewed.pending]: (state) => {
+      markPending(state);
+    },
+    [getAiQuestionReviewed.fulfilled]: (state) => {
+      markSettled(state);
+    },
+    [getAiQuestionReviewed.rejected]: (state) => {
+      markSettled(state);
     },
     [setDemoAlert.fulfilled]: (state, action) => {
       state.setDemoAlert = action.payload;
     },
   },
+
 });
 
 const { reducer } = createParticipantUserEntrySlice;

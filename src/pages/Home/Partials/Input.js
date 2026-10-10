@@ -2,16 +2,31 @@ import { useTranslation } from 'react-i18next';
 import { useDispatch } from 'react-redux';
 import { setDemoAlert } from 'slices/ParticipantSlice';
 
+const INPUT_CLASS = [
+  'w-full max-w-[600px] rounded-xl border border-slate-300 bg-white px-4 py-3',
+  'text-[15px] text-slate-900 outline-none transition focus:border-teal-700',
+  'focus:ring-4 focus:ring-teal-700/10',
+].join(' ');
+
 function QuestionTitle({ questionTitle }) {
   return (
-    <div className='question-title'>
-      <h3>{questionTitle}</h3>
+    <div className='max-w-3xl'>
+      <h3 className='m-0 break-words text-[18px] font-bold leading-7 tracking-[-0.01em] text-slate-900 sm:text-[20px] lg:text-[21px]'>
+        {questionTitle}
+      </h3>
     </div>
   );
 }
 
 function Input({
-  type, questionTitle, questionOptions, saveUserAnswer, userAnswer, userMultiSelectAnswer, setUserMultiselectAnswer, demoError,
+  type,
+  questionTitle,
+  questionOptions,
+  saveUserAnswer,
+  userAnswer,
+  userMultiSelectAnswer,
+  setUserMultiselectAnswer,
+  demoError,
   isCategoryQuestion,
 }) {
   const { t } = useTranslation();
@@ -50,7 +65,12 @@ function Input({
 
   const setQuestionText = (e) => {
     saveUserAnswer(e.target.value);
-    if (demoError && (demoError.errorType === 'postal_error' || demoError.errorType === 'zip_error' || demoError.errorType === 'fsa_error')) {
+    if (
+      demoError
+      && (demoError.errorType === 'postal_error'
+        || demoError.errorType === 'zip_error'
+        || demoError.errorType === 'fsa_error')
+    ) {
       dispatch(setDemoAlert({}));
     }
   };
@@ -66,42 +86,52 @@ function Input({
     }
   };
 
+  const inputClass = INPUT_CLASS;
+  const errorClass = 'mt-2 flex w-full max-w-[600px] items-start gap-2 rounded-xl border border-red-200 bg-red-50 px-3 py-2.5 text-[13px] leading-5 text-red-700';
+  const optionBase = 'flex min-h-[50px] cursor-pointer items-start gap-3 rounded-xl border px-4 py-3 transition';
+
+  const renderError = (message) => (
+    <span className={errorClass}>
+      <span className='grid h-[18px] w-[18px] shrink-0 place-items-center rounded-full bg-red-600 text-[11px] font-bold text-white'>!</span>
+      <span>{message}</span>
+    </span>
+  );
+
   switch (type) {
     case 'text':
       return (
-        <div className='question-box'>
+        <div>
           <QuestionTitle questionTitle={questionTitle} />
-          <div className='question-content'>
-            <input type='text' className='form-control survey-text-input' value={userAnswer} placeholder='' onChange={setQuestionText} />
-            {demoError && (demoError.errorType === 'postal_error' || demoError.errorType === 'zip_error' || demoError.errorType === 'fsa_error') && (
-              <span className='survey-inline-error'>
-                <span className='survey-inline-error-icon'>!</span>
-                {getErrorMessage()}
-              </span>
-            )}
+          <div className='mt-5 max-h-[54vh] overflow-y-auto pr-1'>
+            <input type='text' className={inputClass} value={userAnswer} placeholder='' onChange={setQuestionText} />
+            {demoError && (demoError.errorType === 'postal_error' || demoError.errorType === 'zip_error' || demoError.errorType === 'fsa_error') && renderError(getErrorMessage())}
           </div>
         </div>
       );
     case 'openended':
       return (
-        <div className='question-box'>
+        <div>
           <QuestionTitle questionTitle={questionTitle} />
-          <div className='question-content'>
-            <input type='text' className='form-control survey-text-input' value={userAnswer} placeholder='' onChange={(e) => saveUserAnswer(e.target.value)} />
+          <div className='mt-5 max-h-[54vh] overflow-y-auto pr-1'>
+            <input type='text' className={inputClass} value={userAnswer} placeholder='' onChange={(e) => saveUserAnswer(e.target.value)} />
           </div>
         </div>
       );
     case 'radio':
       return (
-        <div className='question-box'>
+        <div>
           <QuestionTitle questionTitle={questionTitle} />
-          <div className='question-content survey-option-list'>
+          <div className='mt-5 grid max-h-[54vh] gap-2.5 overflow-y-auto pr-1'>
             {questionOptions.map((item, key) => {
               const selected = item._id === userAnswer;
               return (
-                <div className={`form-check survey-option ${selected ? 'survey-option-selected' : ''}`} key={key}>
+                <label
+                  className={`${optionBase} ${selected ? 'border-teal-600 bg-teal-50' : 'border-slate-200 bg-slate-50 hover:border-slate-300 hover:bg-white'}`}
+                  key={key}
+                  htmlFor={`flexRadioDefault${key}`}
+                >
                   <input
-                    className='form-check-input'
+                    className='mt-0.5 h-[18px] w-[18px] shrink-0 accent-teal-700'
                     type='radio'
                     name='radio'
                     checked={selected}
@@ -109,10 +139,8 @@ function Input({
                     id={`flexRadioDefault${key}`}
                     onChange={(e) => saveUserAnswer(e.target.value)}
                   />
-                  <label className='form-check-label' htmlFor={`flexRadioDefault${key}`}>
-                    {item.optionText}
-                  </label>
-                </div>
+                  <span className='min-w-0 flex-1 break-words text-[14px] font-medium leading-6 text-slate-700'>{item.optionText}</span>
+                </label>
               );
             })}
           </div>
@@ -120,10 +148,10 @@ function Input({
       );
     case 'dropdown':
       return (
-        <div className='question-box'>
+        <div>
           <QuestionTitle questionTitle={questionTitle} />
-          <div className='question-content'>
-            <select className='form-select survey-select-input' value={userAnswer} onChange={(e) => saveUserAnswer(e.target.value)}>
+          <div className='mt-5 max-h-[54vh] overflow-y-auto pr-1'>
+            <select className={inputClass} value={userAnswer} onChange={(e) => saveUserAnswer(e.target.value)}>
               <option value=''>Select</option>
               {getOptionData(questionOptions)}
             </select>
@@ -132,15 +160,19 @@ function Input({
       );
     case 'multiselect':
       return (
-        <div className='question-box'>
+        <div>
           <QuestionTitle questionTitle={questionTitle} />
-          <div className='question-content survey-option-list'>
+          <div className='mt-5 grid max-h-[54vh] gap-2.5 overflow-y-auto pr-1'>
             {questionOptions.map((item, key) => {
               const selected = userMultiSelectAnswer && Array.isArray(userMultiSelectAnswer) && userMultiSelectAnswer.includes(item._id);
               return (
-                <div className={`form-check survey-option ${selected ? 'survey-option-selected' : ''}`} key={key}>
+                <label
+                  className={`${optionBase} ${selected ? 'border-teal-600 bg-teal-50' : 'border-slate-200 bg-slate-50 hover:border-slate-300 hover:bg-white'}`}
+                  key={key}
+                  htmlFor={`flexRadioDefault${key}`}
+                >
                   <input
-                    className='form-check-input'
+                    className='mt-0.5 h-[18px] w-[18px] shrink-0 accent-teal-700'
                     data-attr='check'
                     type='checkbox'
                     checked={selected}
@@ -149,10 +181,8 @@ function Input({
                     id={`flexRadioDefault${key}`}
                     onChange={(e) => saveMultiSelectAnswer(e.target.value)}
                   />
-                  <label className='form-check-label' htmlFor={`flexRadioDefault${key}`}>
-                    {item.optionText}
-                  </label>
-                </div>
+                  <span className='min-w-0 flex-1 break-words text-[14px] font-medium leading-6 text-slate-700'>{item.optionText}</span>
+                </label>
               );
             })}
           </div>
@@ -160,16 +190,11 @@ function Input({
       );
     case 'range':
       return (
-        <div className='question-box'>
+        <div>
           <QuestionTitle questionTitle={questionTitle} />
-          <div className='question-content'>
-            <input type='text' className='form-control survey-text-input' value={userAnswer} placeholder='' onChange={setQuestionrange} />
-            {demoError && demoError.errorType === 'age_error' && (
-              <span className='survey-inline-error'>
-                <span className='survey-inline-error-icon'>!</span>
-                {t('home.age.error')}
-              </span>
-            )}
+          <div className='mt-5 max-h-[54vh] overflow-y-auto pr-1'>
+            <input type='text' className={inputClass} value={userAnswer} placeholder='' onChange={setQuestionrange} />
+            {demoError && demoError.errorType === 'age_error' && renderError(t('home.age.error'))}
           </div>
         </div>
       );
