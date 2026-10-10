@@ -15,9 +15,7 @@ import {
   getRouterV4AINextQuestionApi,
 } from 'services/participantService';
 import { redirectToCalibr8 } from 'utils/calibr8Redirect';
-import Cookies from 'universal-cookie';
-
-const cookies = new Cookies();
+import { getCookieUserId } from 'utils/cookieUserId';
 
 export const createParticipantUserEntryOnly = createAsyncThunk('paricipant/createParticipantUserEntry', async ({ vendorId, browserInfo, userLandingUrl }, { rejectWithValue }) => {
   try {
@@ -53,7 +51,7 @@ export const participantsDemographics = createAsyncThunk('paricipant/participant
   try {
     const participantData = JSON.stringify(userData);
     const landingUrlString = userLandingUrl;
-    const newUserId = cookies.get('userId');
+    const newUserId = await getCookieUserId();
     let browserLang = navigator.language || navigator.userLanguage;
     browserLang = browserLang.replace('-', '_');
     const updatedBrowserLang = detectMobileData(browserLang); // for mobile data detection like Iphone: 360 Browser and Android: QQ Browser
@@ -78,7 +76,7 @@ export const createParticipant = createAsyncThunk('paricipant/createParticipant'
   try {
     const participantData = JSON.stringify(userData);
     const landingUrlString = userLandingUrl;
-    const newUserId = cookies.get('userId');
+    const newUserId = await getCookieUserId();
     let browserLang = navigator.language || navigator.userLanguage;
     browserLang = browserLang.replace('-', '_');
     const updatedBrowserLang = detectMobileData(browserLang); // for mobile data detection like Iphone: 360 Browser and Android: QQ Browser and UC Browser
@@ -165,7 +163,7 @@ export const setDemoAlert = createAsyncThunk(
 
 export const getRouterV4AIQuestion = createAsyncThunk('api/getRouterV4AIQuestion', async (data, { rejectWithValue }) => {
   try {
-    const newUserId = cookies.get('userId');
+    const newUserId = await getCookieUserId();
     data.cookie_id = newUserId;
     const res = await getRouterV4AIQuestionApi(data);
     return res.data;
@@ -179,7 +177,7 @@ export const getRouterV4AIQuestion = createAsyncThunk('api/getRouterV4AIQuestion
 
 export const getRouterV4AINextQuestion = createAsyncThunk('api/getRouterV4AINextQuestion', async (data, { rejectWithValue }) => {
   try {
-    const newUserId = cookies.get('userId');
+    const newUserId = await getCookieUserId();
     data.cookie_id = newUserId;
     const res = await getRouterV4AINextQuestionApi(data);
     return res.data;

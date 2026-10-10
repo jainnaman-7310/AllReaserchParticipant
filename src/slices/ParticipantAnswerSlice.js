@@ -9,14 +9,12 @@ import {
   submitRandomQuestionApi,
 } from 'services/participantService';
 import { redirectToCalibr8 } from 'utils/calibr8Redirect';
-import Cookies from 'universal-cookie';
+import { getCookieUserId } from 'utils/cookieUserId';
 import SimpleCrypto from 'simple-crypto-js';
-
-const cookies = new Cookies();
 
 export const saveParticipantReply = createAsyncThunk('paricipant/saveParticipantReply', async (data, { rejectWithValue }) => {
   try {
-    const newUserId = cookies.get('userId');
+    const newUserId = await getCookieUserId();
     data.cookieUserid = newUserId;
     const _secretKey = 'zebra';
     const simpleCrypto = new SimpleCrypto(_secretKey);
@@ -45,7 +43,7 @@ export const saveParticipantReply = createAsyncThunk('paricipant/saveParticipant
 
 export const participantFailedInScreeners = createAsyncThunk('paricipant/participantFailedInScreeners', async (data, { rejectWithValue }) => {
   try {
-    const newUserId = cookies.get('userId');
+    const newUserId = await getCookieUserId();
     data.cookieUserid = newUserId;
     const _secretKey = 'zebra';
     const simpleCrypto = new SimpleCrypto(_secretKey);
@@ -69,7 +67,7 @@ export const participantFailedInScreeners = createAsyncThunk('paricipant/partici
 
 export const checkScreenerForQuota = createAsyncThunk('paricipant/checkScreenerForQuota', async (data, { rejectWithValue }) => {
   try {
-    const newUserId = cookies.get('userId');
+    const newUserId = await getCookieUserId();
     data.cookieUserid = newUserId;
     const _secretKey = 'zebra';
     const simpleCrypto = new SimpleCrypto(_secretKey);
@@ -93,7 +91,7 @@ export const checkScreenerForQuota = createAsyncThunk('paricipant/checkScreenerF
 
 export const getRandomAIQuestion = createAsyncThunk('paricipant/getrandomQuestion', async (data, { rejectWithValue }) => {
   try {
-    const newUserId = cookies.get('userId');
+    const newUserId = await getCookieUserId();
     data.cookie_id = newUserId;
     const res = await getRandomQuestionApi(data);
     return res.data;
@@ -107,7 +105,7 @@ export const getRandomAIQuestion = createAsyncThunk('paricipant/getrandomQuestio
 
 export const submitRandomQuestionAnswer = createAsyncThunk('paricipant/submit-random-question', async (data, { rejectWithValue }) => {
   try {
-    const newUserId = cookies.get('userId');
+    const newUserId = await getCookieUserId();
     data.cookie_id = newUserId;
     const res = await submitRandomQuestionApi(data);
     return res.data;

@@ -9,8 +9,8 @@ import { setBrowserData, redirectToUrl } from 'utils/utils';
 import { requestData } from 'utils/helpers';
 import * as rdd from 'react-device-detect';
 import { useSelector, useDispatch } from 'react-redux';
-import { botDetector, browserFingerprints } from 'sentinel-guard.js';
-import Cookies from 'universal-cookie';
+import { botDetector } from 'sentinel-guard.js';
+import { getCookieUserId } from 'utils/cookieUserId';
 import {
   createParticipantUserEntry,
   createParticipantUserEntryOnly,
@@ -55,8 +55,6 @@ const START_SURVEY_BUTTON_CLASS = [
 const Question = lazy(() => import('./Partials/Question'));
 const RandomQuestionPage = lazy(() => import('../RandomQuestionAsked/index'));
 const AiQuestion = lazy(() => import('./Partials/AiQuestion'));
-
-const cookies = new Cookies();
 
 const EXCLUDED_VENDOR_IDS = [
   PASS,
@@ -211,18 +209,16 @@ function Home({ setHeaderState }) {
 
     const initializeParticipant = async () => {
       if (vendorId && browserInfo && userLandingUrl) {
-        let cookieUserIds = uniqueId;
-        if (!cookieUserIds) {
-          cookieUserIds = await browserFingerprints();
-          if (cancelled) return;
-          setUniqueId(cookieUserIds);
-        }
+        const cookieUserId = await getCookieUserId();
+        if (cancelled) return;
+
+        setUniqueId(cookieUserId);
 
         const particiapntInitialDataParams = {
           vid: vendorId,
           hash: '',
           userLandingUrl,
-          cookieUserid: cookieUserIds || cookies.get('userId'),
+          cookieUserid: cookieUserId,
           userSpId: localStorage.getItem('spfjkshdfjbnvcbj'),
         };
 
@@ -312,7 +308,6 @@ function Home({ setHeaderState }) {
           setRouterClient(1);
           setApiClientId(getParticipantData.apiClientId);
         }
-        cookies.set('userId', getParticipantData.userId, { path: '/' });
         setValidUrl(1);
         // setParticipantApiData(true);
       }
